@@ -31,7 +31,7 @@ public class Matrice {
     public String toString() {
         String s;
         s = "";
-        for (int i = 0; i < this.nbrLig; i++) {
+        for (int i = 0; i < this.getNbrLig(); i++) {
             s = s + "[";
             for (int j = 0; j < this.getNbrCol(); j++) {
                 s = s + String.format("%+4.2E", this.coeffs[i][j]);
@@ -48,7 +48,7 @@ public class Matrice {
 
     public static Matrice identite(int taille) {
         Matrice m = new Matrice(taille, taille);
-        for (int i = 0; i < m.nbrLig; i++) {
+        for (int i = 0; i < m.getNbrLig(); i++) {
             m.coeffs[i][i] = 1;
         }
         return m;
@@ -90,20 +90,100 @@ public class Matrice {
         System.out.println("mat alea : \n" + m);
 
     }
-    
+
     public int getNbrLig() {
         return this.nbrLig;
     }
-    
-    public double get(int lig,int col) {
+
+    public double get(int lig, int col) {
         return this.coeffs[lig][col];
     }
-    
-    
+
+    public void set(int lig, int col, double nouvelleVal) {
+        this.coeffs[lig][col] = nouvelleVal;
+    }
+
+    /**
+     * concatener les lignes de this et m. "This en dessus et m en dessous"
+     *
+     * @param m seconde matrice
+     * @return la concatenation de this et m
+     */
+    public Matrice concatLig(Matrice m) {
+        if (this.nbrCol != m.nbrCol) {
+            throw new Error("nbr cols incompatibles");
+        }
+        Matrice r = new Matrice(this.getNbrLig() + m.getNbrLig(),
+                this.getNbrCol());
+
+        for (int i = 0; i < this.getNbrLig(); i++) {
+            for (int j = 0; j < this.getNbrCol(); j++) {
+                // r.coeffs[i][j] = this.coeffs[i][j];
+                r.set(i, j, this.get(i, j));
+
+            }
+        }
+        for (int i = 0; i < m.getNbrLig(); i++) {
+            for (int j = 0; j < m.getNbrCol(); j++) {
+                r.set(this.nbrLig + i, j, this.get(i, j));
+
+            }
+        }
+        return r;
+
+    }
+
+    public Matrice concatCol(Matrice m) {
+        if (this.nbrLig != m.nbrLig) {
+            throw new Error("nbr cols incompatibles");
+        }
+        Matrice r = new Matrice(this.getNbrLig(),
+                this.getNbrCol() + m.getNbrCol());
+
+        for (int i = 0; i < this.getNbrLig(); i++) {
+            for (int j = 0; j < this.getNbrCol(); j++) {
+                // r.coeffs[i][j] = this.coeffs[i][j];
+                r.set(i, j, this.get(i, j));
+
+            }
+        }
+        for (int i = 0; i < m.getNbrLig(); i++) {
+            for (int j = 0; j < m.getNbrCol(); j++) {
+                r.set(i, this.nbrCol + j, m.get(i, j));
+
+            }
+        }
+        return r;
+
+    }
+
+    public Matrice transposee() {
+        Matrice r = new Matrice(this.getNbrCol(), this.getNbrLig());
+        for (int i = 0; i < this.getNbrLig(); i++) {
+            for (int j = 0; j < this.getNbrCol(); j++) {
+                r.set(j, i, this.get(i, j));
+
+            }
+        }
+        return r;
+    }
+
+    public Matrice metAuCarre() {
+        return this.concatCol(Matrice.identite(this.nbrLig)).
+                concatLig(Matrice.identite(this.nbrCol).
+                        concatCol(this.transposee()));
+    }
 
     public static void main(String[] args) {
-        Matrice.testAlea();
+        //       Matrice.testAlea();
+        Matrice.testCarre();
 
+    }
+
+    public static void testCarre() {
+        Matrice m = Matrice.mataleaZeroUnDeux(3, 2, 0.33);
+        System.out.println("m : \n" + m);
+        System.out.println("au carre : \n" + m.metAuCarre());
     }
 
     /**
