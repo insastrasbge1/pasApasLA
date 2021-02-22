@@ -5,7 +5,6 @@
  */
 package fr.insa.beuvron.cours.m2.pasapasla.tda56;
 
-
 /**
  *
  * @author francois
@@ -89,16 +88,36 @@ public class Matrice {
         System.out.println("mat alea : \n" + m);
 
     }
-    
+
     public int getNbrLig() {
         return this.nbrLig;
     }
-    
-    public double get(int lig,int col) {
+
+    public double get(int lig, int col) {
         return this.coeffs[lig][col];
     }
     
+    public void set(int lig,int col,double nouvelVal) {
+        this.coeffs[lig][col] = nouvelVal;
+    }
     
+    public Matrice concatLig(Matrice n) {
+        if (this.nbrCol != n.nbrCol) {
+            throw new Error("nombre de cols incompatibles");
+        }
+        Matrice r = new Matrice(this.nbrLig+n.nbrLig,this.nbrCol);
+        for(int i = 0 ; i < this.nbrLig ; i ++) {
+            for (int j = 0 ; j < this.nbrCol ; j ++) {
+                r.coeffs[i][j] = this.coeffs[i][j];
+            }
+        }
+        for(int i = this.nbrLig ; i < this.nbrLig + n.nbrLig; i ++) {
+            for (int j = 0 ; j < this.nbrCol ; j ++) {
+                r.coeffs[i][j] = n.coeffs[i-this.nbrLig][j];
+            }
+        }
+        return r;
+    }
 
     public static void main(String[] args) {
         Matrice.testAlea();
