@@ -5,7 +5,8 @@
  */
 package fr.insa.beuvron.cours.m2.pasapasla.tda34;
 
-import java.util.Arrays;
+import Jama.Matrix;
+import fr.insa.beuvron.Test;
 
 /**
  *
@@ -177,6 +178,8 @@ public class Matrice {
     public static void main(String[] args) {
         //       Matrice.testAlea();
         Matrice.testCarre();
+        Test.monTest();
+//        Matrix m;
 
     }
 
