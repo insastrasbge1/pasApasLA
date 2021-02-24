@@ -90,18 +90,100 @@ public class Matrice {
 
     }
 
- 
     public static void test1() {
         Matrice m = Matrice.matAleaZeroUnDeux(4, 6, 0.33);
         System.out.println("mat alea : \n" + m);
 
     }
 
+    public int getNbrLig() {
+        return this.nbrLig;
+    }
+
+    public double get(int lig, int col) {
+        return this.coeffs[lig][col];
+    }
+
+    public Matrice concatLig(Matrice n) {
+        if (this.getNbrCol() != n.getNbrCol()) {
+            throw new Error("nombre de cols incompatible");
+        }
+        Matrice res = new Matrice(this.getNbrLig() + n.getNbrLig(),
+                this.getNbrCol());
+        for (int i = 0; i < this.getNbrLig(); i++) {
+            for (int j = 0; j < this.getNbrCol(); j++) {
+                res.set(i, j, this.get(i, j));
+            }
+        }
+        for (int i = 0; i < n.getNbrLig(); i++) {
+            for (int j = 0; j < n.getNbrCol(); j++) {
+                res.set(i + this.getNbrLig(), j, n.get(i, j));
+            }
+        }
+        return res;
+    }
+
+    public static void testConcatLig() {
+        Matrice m1 = Matrice.identite(3);
+        Matrice m2 = Matrice.matAleaZeroUnDeux(2, 3, 0.33);
+        Matrice m3 = m1.concatLig(m2);
+        System.out.println("M1 : \n" + m1);
+        System.out.println("M2 : \n" + m2);
+        System.out.println("M3 = M1.concatLig(M2) : \n" + m3);
+    }
+
+    public Matrice add(Matrice m2) {
+        if (this.nbrLig != m2.nbrLig || this.nbrCol != m2.nbrCol) {
+            throw new Error("incompatibles");
+        }
+        int nl = this.nbrLig;
+        int nc = this.nbrCol;
+        Matrice res = new Matrice(nl, nc);
+        for (int i = 0; i < nl; i++) {
+            for (int j = 0; j < nc; j++) {
+                res.set(i, j, this.get(i, j) + m2.get(i, j));
+                // ou res.coeffs[i][j] = this.coeffs[i][j] + m2.coeffs[i][j];
+            }
+        }
+        return res;
+    }
+
+    public Matrice opp() {
+        int nl = this.nbrLig;
+        int nc = this.nbrCol;
+        Matrice res = new Matrice(nl, nc);
+        for (int i = 0; i < nl; i++) {
+            for (int j = 0; j < nc; j++) {
+                res.set(i, j, -this.get(i, j));
+            }
+        }
+        return res;
+    }
+
+    public Matrice moins(Matrice m2) {
+        return this.add(m2.opp());
+    }
+
+    /**
+     * modifie un des coeffs de this.
+     */
+    public void set(int lig, int col, double nVal) {
+        this.coeffs[lig][col] = nVal;
+    }
 
     public static void main(String[] args) {
         // testAffiche();
         //testIdentite();
-        test1();
+        //test1();
+        testConcatLig();
+
+    }
+
+    /**
+     * @return the nbrCol
+     */
+    public int getNbrCol() {
+        return nbrCol;
     }
 
 }
