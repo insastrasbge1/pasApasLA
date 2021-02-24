@@ -90,9 +90,18 @@ public class Matrice {
 
     }
 
+ 
+    public static void test1() {
+        Matrice m = Matrice.matAleaZeroUnDeux(4, 6, 0.33);
+        System.out.println("mat alea : \n" + m);
+
+    }
+
+
     public static void main(String[] args) {
         // testAffiche();
-        testIdentite();
+        //testIdentite();
+        test1();
     }
 
 }
