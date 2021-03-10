@@ -5,16 +5,23 @@
  */
 package fr.insa.beuvron.cours.m2.pasapasla.dessin;
 
+import java.awt.Color;
+
 /**
  *
  * @author francois
  */
-public class Segment {
+public class Segment extends FigureSimple {
     
     private Point debut;
     private Point fin;
     
     public Segment(Point debut,Point fin) {
+        this(debut,fin,new Color(255,0,255));
+    }
+    
+    public Segment(Point debut,Point fin,Color c) {
+        super(c);
         this.debut = debut;
         this.fin = fin;
     }
@@ -38,6 +45,11 @@ public class Segment {
         double abmil = mil.getPx();
         s1.debut.setPx(-3);
         System.out.println("s1 nouveau = " + s1);
+    }
+
+    @Override
+    public double minX() {
+        return Math.min(this.debut.minX(), this.fin.minX());
     }
     
 }
